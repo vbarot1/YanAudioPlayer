@@ -51,13 +51,13 @@ public class MusicService extends Service {
 	public static final int notifyPrepared = 9999;
 	public static final int notifyError = 0000;
 
-	public static final int PLAY_INIT = 1;// 初始化
-	public static final int PLAY_MSG = 2;// 开始播放
-	public static final int PAUSE_MSG = 3;// 暂停播放
-	public static final int CONTINUE_MSG = 4;// 继续播放
-	public static final int SEEKTO_MSG = 5;// 继续播放
+	public static final int PLAY_INIT = 1;// initial
+	public static final int PLAY_MSG = 2;// start to play
+	public static final int PAUSE_MSG = 3;// pause
+	public static final int CONTINUE_MSG = 4;// continue
+	public static final int SEEKTO_MSG = 5;// start from a particular time
 
-	public static final String MusicServiceStatus = "com.kting.action.MusicServiceStatus"; // 播放状态广播注册Action
+	public static final String MusicServiceStatus = "cs.gsu.edu"; // broadcast register Action
 
 	@Override
 	public void onCreate() {
@@ -177,12 +177,16 @@ public class MusicService extends Service {
 				initCacheListener();
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
+               notifyError("System_ERROR" + e.toString());
 			} catch (SecurityException e) {
 				e.printStackTrace();
+                notifyError("System_ERROR"+ e.toString());
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
+                notifyError("System_ERROR"+ e.toString());
 			} catch (IOException e) {
 				e.printStackTrace();
+                notifyError("System_ERROR"+ e.toString());
 			}
 		}
 	}
@@ -218,7 +222,7 @@ public class MusicService extends Service {
 				// notifySeekComplete();
 			}
 		});
-		// 准备完成
+		// finish loading, start to play
 		mediaPlayer.setOnPreparedListener(new OnPreparedListener() {
 
 			@Override
@@ -319,7 +323,7 @@ public class MusicService extends Service {
 		sendBroadcast(intent);
 	}
 
-	// 每一秒更新播放进度
+	// proceed every one sec.
 	private class updateTask extends TimerTask {
 		public void run() {
 			if (mediaPlayer != null) {

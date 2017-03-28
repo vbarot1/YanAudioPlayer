@@ -15,6 +15,7 @@ import butterknife.ButterKnife;
 import edu.gsu.httpscs.yanaudioplayer.AudioOb;
 import edu.gsu.httpscs.yanaudioplayer.R;
 import edu.gsu.httpscs.yanaudioplayer.audio.BaseAudioOb;
+import edu.gsu.httpscs.yanaudioplayer.audio.MusicController;
 
 /**
  * Created by YoungH on 3/16/17.
@@ -24,10 +25,12 @@ public class PlayListAdapter extends BaseAdapter {
 
     private final ArrayList<BaseAudioOb> contentList;
     private final Context context;
+    private final MusicController controller;
 
-    public PlayListAdapter(Context context, ArrayList<BaseAudioOb> contentList) {
+    public PlayListAdapter(Context context, ArrayList<BaseAudioOb> contentList, MusicController controller) {
         this.contentList = contentList;
         this.context = context;
+        this.controller = controller;
     }
 
     @Override
@@ -58,7 +61,19 @@ public class PlayListAdapter extends BaseAdapter {
 
         AudioOb vo = (AudioOb) contentList.get(position);
         holder.name.setText(vo.getName());
+    if(controller.position == position) {
+        holder.mark.setVisibility(View.VISIBLE);
+    } else{
+        holder.mark.setVisibility(View.INVISIBLE);
+    }
 
+    if(controller.isPlaying) {
+
+        holder.mark.setBackgroundResource(R.mipmap.play_pause_bn_up);
+    }else {
+        holder.mark.setBackgroundResource(R.mipmap.play_play_bn_down);
+
+    }
         return convertView;
     }
 

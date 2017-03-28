@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,10 +15,13 @@ import java.util.Map.Entry;
  * add MusicService to minifests
  * initMusicReceiver
  * UnRegisterReceiver
+ * setPlaylist
  * addListener(name,IPlayerStatus)
  * deleteListener(name)
  * clearListener()
  * @author Yan
+ *
+ *
  *
  */
 public class MusicController {
@@ -32,6 +36,8 @@ public class MusicController {
 	private Map<String, IPlayerStatus> listenerMap = new HashMap<String, IPlayerStatus>();
     public static final String PLAY_NEXT =  "MusicController.broadcast.next";
 	public ArrayList<BaseAudioOb> playList = new ArrayList<BaseAudioOb>();
+	private int seekForwardTime = 5000; // 5000 milliseconds
+	private int seekBackwardTime = 5000; // 5000 milliseconds
 
 	public static MusicController getInstance(Context mContext){
 		if (null==controller){
@@ -82,12 +88,14 @@ public class MusicController {
 			listenerMap.clear();			
 		}
 	}
+
+
 //	public void setListener(IPlayerStatus listener) {
 //		playerStatus = listener;
 //	}
 	
 	/**
-	 * Broadcast Receiver 用来接收从service传回来的广播的内部类
+	 * Broadcast Receiver used to receive msg from service according to the action
 	 */
 	public class PlayerReceiver extends BroadcastReceiver {
 		@Override
@@ -108,7 +116,7 @@ public class MusicController {
 					onInitComplete();
 					//playerStatus.onInitComplete();
 					break;
-				case MusicService.notifyStartPlay:				
+				case MusicService.notifyStartPlay:
 					onStart(intent.getIntExtra("TotalTime", 0));
 					//playerStatus.onStart(intent.getIntExtra("TotalTime", 0));
 					break;
@@ -279,6 +287,8 @@ public class MusicController {
 			position = position;
 			play();
 		} else {//This is the first one
+			position+=1;
+			Toast.makeText(mContext, "This is the first one.", Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -287,7 +297,8 @@ public class MusicController {
 		if (position < getPlayList().size()) {
 			play();
 		} else {
-			//This is the last one
+			position-=1;
+			Toast.makeText(mContext, "This is the last one", Toast.LENGTH_LONG).show();
 		}
 	}
 

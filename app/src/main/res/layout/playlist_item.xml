@@ -7,7 +7,7 @@
         android:layout_height="20dp"
         android:layout_marginLeft="20dp"
         android:layout_centerVertical="true"
-        android:src="@mipmap/play_play_bn_up"
+        android:background="@mipmap/play_play_bn_up"
         android:layout_alignParentLeft="true"/>
 
     <TextView
